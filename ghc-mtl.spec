@@ -3,10 +3,11 @@ Summary:	A Haskell binding to the mtl graphics library
 Summary(pl.UTF-8):	Wiązanie Haskella do biblioteki graficznej mtl
 Name:		ghc-%{pkgname}
 Version:	2.1.2
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Development/Languages
-Source0:	http://hackage.haskell.org/packages/archive/mtl/%{version}/%{pkgname}-%{version}.tar.gz
+#Source0Download: http://hackage.haskell.org/package/mtl/
+Source0:	http://hackage.haskell.org/package/mtl-%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	943c110524d96126bfa0e61f7df1ebcd
 URL:		http://hackage.haskell.org/package/mtl/
 BuildRequires:	ghc >= 6.12.3
@@ -70,7 +71,7 @@ cp -a $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/html %{name}-%{version}-doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.hs register \
-	--gen-pkg-config=$RPM_BUILD_ROOT/%{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
+	--gen-pkg-config=$RPM_BUILD_ROOT%{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT

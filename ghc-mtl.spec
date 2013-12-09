@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	prof	# profiling library
+#
 %define		pkgname	mtl
 Summary:	A Haskell binding to the mtl graphics library
 Summary(pl.UTF-8):	Wiązanie Haskella do biblioteki graficznej mtl
@@ -6,12 +10,14 @@ Version:	2.1.2
 Release:	1
 License:	BSD
 Group:		Development/Languages
-#Source0Download: http://hackage.haskell.org/package/mtl/
+#Source0Download: http://hackage.haskell.org/package/mtl
 Source0:	http://hackage.haskell.org/package/mtl-%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	943c110524d96126bfa0e61f7df1ebcd
-URL:		http://hackage.haskell.org/package/mtl/
+URL:		http://hackage.haskell.org/package/mtl
 BuildRequires:	ghc >= 6.12.3
+%{?with_prof:BuildRequires:	ghc-prof >= 6.12.3}
 BuildRequires:	ghc-transformers >= 0.3
+%{?with_prof:BuildRequires:	ghc-transformers-prof >= 0.3}
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires:	ghc-transformers >= 0.3
@@ -35,22 +41,38 @@ Marka P. Jonesa, opublikowanym w "Advanced School of Functional
 Programming", 1995
 (<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>).
 
+%package prof
+Summary:	Profiling %{pkgname} library for GHC
+Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-transformers-prof >= 0.3
+
+%description prof
+Profiling %{pkgname} library for GHC. Should be installed when
+GHC's profiling subsystem is needed.
+
+%description prof -l pl.UTF-8
+Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
+kiedy potrzebujemy systemu profilującego z GHC.
+
 %package doc
-Summary:	HTML documentation for %{pkgname}
-Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla pakietu %{pkgname}
+Summary:	HTML documentation for ghc %{pkgname} package
+Summary(pl.UTF-8):	Dokumentacja w formacie HTML dla pakietu ghc %{pkgname}
 Group:		Documentation
 
 %description doc
-HTML documentation for %{pkgname}.
+HTML documentation for ghc %{pkgname} package.
 
 %description doc -l pl.UTF-8
-Dokumentacja w formacie HTML dla pakietu %{pkgname}.
+Dokumentacja w formacie HTML dla pakietu ghc %{pkgname}.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
 
 %build
 runhaskell Setup.hs configure -v2 \
+	%{?with_prof:--enable-library-profiling} \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
 	--libexecdir=%{_libexecdir} \
@@ -86,7 +108,37 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc LICENSE
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/HSmtl-%{version}.o
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSmtl-%{version}.a
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Cont
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Cont/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Error
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Error/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/RWS
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/RWS/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Reader
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Reader/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/State
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/State/*.hi
+%dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Writer
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Writer/*.hi
+
+%if %{with prof}
+%files prof
+%defattr(644,root,root,755)
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/libHSmtl-%{version}_p.a
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Cont/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Error/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/RWS/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Reader/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/State/*.p_hi
+%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/Control/Monad/Writer/*.p_hi
+%endif
 
 %files doc
 %defattr(644,root,root,755)

@@ -15,16 +15,24 @@ Source0:	http://hackage.haskell.org/package/mtl-%{version}/%{pkgname}-%{version}
 # Source0-md5:	943c110524d96126bfa0e61f7df1ebcd
 URL:		http://hackage.haskell.org/package/mtl
 BuildRequires:	ghc >= 6.12.3
-%{?with_prof:BuildRequires:	ghc-prof >= 6.12.3}
+BuildRequires:	ghc-base < 6
 BuildRequires:	ghc-transformers >= 0.3
-%{?with_prof:BuildRequires:	ghc-transformers-prof >= 0.3}
+%if %{with prof}
+BuildRequires:	ghc-prof >= 6.12.3
+BuildRequires:	ghc-base-prof < 6
+BuildRequires:	ghc-transformers-prof >= 0.3
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
+Requires:	ghc-base < 6
 Requires:	ghc-transformers >= 0.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
 %define		_enable_debug_packages	0
+
+# don't compress haddock files
+%define		_noautocompressdoc	*.haddock
 
 %description
 Monad classes using functional dependencies, with instances for
@@ -46,6 +54,7 @@ Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-base-prof < 6
 Requires:	ghc-transformers-prof >= 0.3
 
 %description prof

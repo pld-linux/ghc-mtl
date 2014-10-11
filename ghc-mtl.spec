@@ -6,26 +6,26 @@
 Summary:	A Haskell binding to the mtl graphics library
 Summary(pl.UTF-8):	Wiązanie Haskella do biblioteki graficznej mtl
 Name:		ghc-%{pkgname}
-Version:	2.1.2
+Version:	2.2.1
 Release:	1
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/mtl
 Source0:	http://hackage.haskell.org/package/mtl-%{version}/%{pkgname}-%{version}.tar.gz
-# Source0-md5:	943c110524d96126bfa0e61f7df1ebcd
+# Source0-md5:	96a2f12b94ea8d7cb0aea999cd2e3802
 URL:		http://hackage.haskell.org/package/mtl
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-base < 6
-BuildRequires:	ghc-transformers >= 0.3
+BuildRequires:	ghc-transformers >= 0.4
 %if %{with prof}
 BuildRequires:	ghc-prof >= 6.12.3
 BuildRequires:	ghc-base-prof < 6
-BuildRequires:	ghc-transformers-prof >= 0.3
+BuildRequires:	ghc-transformers-prof >= 0.4
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires:	ghc-base < 6
-Requires:	ghc-transformers >= 0.3
+Requires:	ghc-transformers >= 0.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -55,7 +55,7 @@ Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	ghc-base-prof < 6
-Requires:	ghc-transformers-prof >= 0.3
+Requires:	ghc-transformers-prof >= 0.4
 
 %description prof
 Profiling %{pkgname} library for GHC. Should be installed when

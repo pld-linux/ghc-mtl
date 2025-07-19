@@ -17,6 +17,7 @@ URL:		http://hackage.haskell.org/package/mtl
 BuildRequires:	ghc >= 6.12.3
 BuildRequires:	ghc-base < 6
 BuildRequires:	ghc-transformers >= 0.4
+BuildRequires:	ghc-transformers < 0.5
 %if %{with prof}
 BuildRequires:	ghc-prof >= 6.12.3
 BuildRequires:	ghc-base-prof < 6
